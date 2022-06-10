@@ -7,8 +7,7 @@ namespace Assignment.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        [HttpGet]
-        [Route("Login")]
+        
 
     }
 }
