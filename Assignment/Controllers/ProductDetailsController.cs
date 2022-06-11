@@ -22,7 +22,8 @@ namespace Assignment.Controllers
 
         // GET: api/ProductDetails
         [HttpGet]
-        [Route("ok")]
+        [Route("api-get-list-product-details")]
+
         public async Task<ActionResult<IEnumerable<ProductDetail>>> GetProductDetails()
         {
           if (_context.ProductDetails == null)
