@@ -1,11 +1,12 @@
-using Assignment.Model;
+using Assignment.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddMvc();
+builder.Services.AddHttpContextAccessor();
 var connectionString = builder.Configuration.GetConnectionString("conn");
 builder.Services.AddDbContext<C5_AssignmentContext>(options => options.UseSqlServer(connectionString));
 var app = builder.Build();

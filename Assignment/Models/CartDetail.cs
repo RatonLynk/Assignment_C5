@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Assignment.Model
+namespace Assignment.Models
 {
     public partial class CartDetail
     {
@@ -10,6 +10,7 @@ namespace Assignment.Model
         public int ProductId { get; set; }
         public int Quantity { get; set; }
         public bool Status { get; set; }
+        public int ColorID { get; set; }
 
         public virtual Cart Cart { get; set; } = null!;
         public virtual ProductDetail Product { get; set; } = null!;

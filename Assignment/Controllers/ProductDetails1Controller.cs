@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Assignment.Model;
+using Assignment.Models;
 using Newtonsoft.Json;
 
 namespace Assignment.Controllers
@@ -20,6 +20,37 @@ namespace Assignment.Controllers
         }
 
         // GET: ProductDetails1
+
+        //[HttpPost,ActionName("AddToCart")]
+        //public async Task<IActionResult> AddToCart(int buyAmount, int prodID, int colorID)
+        //{
+
+        //    CartDetail Item = new CartDetail();
+            
+        //    User? user = _context.Users.FirstOrDefault(u => u.Username == HttpContext.Session.GetString("username"));
+        //    if (user == null)
+        //    {
+        //        string? jsonCart = HttpContext.Session.GetString("Cart");
+        //        List<CartDetail>? cart = new List<CartDetail>();
+        //        if (jsonCart == null || jsonCart.Length == 0)
+        //        {
+        //            cart = new List<CartDetail>();
+        //        }
+        //        else
+        //        {
+        //            cart = JsonConvert.DeserializeObject<List<CartDetail>>(jsonCart);
+        //        }
+               
+        //        Item.CartId = 0;
+        //        Item.Status = true;
+        //        Item.Quantity = buyAmount;
+        //        Item.ProductId = prodID;
+        //        Item.ColorID = colorID;
+        //        cart.Add(Item);
+
+        //    }
+        //    return RedirectToAction("Index");
+        //}
         public async Task<IActionResult> Index()
         {
             HttpClient client = new HttpClient();

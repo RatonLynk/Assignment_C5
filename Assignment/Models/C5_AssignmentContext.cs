@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Assignment.Model
+namespace Assignment.Models
 {
     public partial class C5_AssignmentContext : DbContext
     {
@@ -75,16 +75,15 @@ namespace Assignment.Model
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
 
-                entity.HasOne(d => d.CartNavigation)
-                    .WithOne(p => p.Cart)
-                    .HasForeignKey<Cart>(d => d.CartId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Cart_User");
-
                 entity.HasOne(d => d.DeliveryType)
                     .WithMany(p => p.Carts)
                     .HasForeignKey(d => d.DeliveryTypeId)
                     .HasConstraintName("FK_Cart_DeliveryType");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Carts)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Cart_User");
             });
 
             modelBuilder.Entity<CartDetail>(entity =>
