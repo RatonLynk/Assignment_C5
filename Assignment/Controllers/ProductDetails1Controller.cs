@@ -54,12 +54,12 @@ namespace Assignment.Controllers
         public async Task<IActionResult> Index()
         {
             HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("https://localhost:7110/api/ProductDetails/");
-            var JsonConnect = client.GetAsync("api-get-list-product-details").Result;
+            client.BaseAddress = new Uri("https://localhost:7110/api/ModelsAPI/");
+            var JsonConnect = client.GetAsync("ok").Result;
             string JsonData = JsonConnect.Content.ReadAsStringAsync().Result;
             ViewData["data"] = JsonData;
 
-            var model = JsonConvert.DeserializeObject<List<ProductDetail>>(JsonData);
+            var model = JsonConvert.DeserializeObject<List<ViewSanPham>>(JsonData);
             return View(model);
         }
 
