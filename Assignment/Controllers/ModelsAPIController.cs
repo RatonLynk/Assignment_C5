@@ -65,6 +65,7 @@ namespace Assignment.Controllers
                     join g in _dbContext.Categories on a.CategoryId equals g.CategoryId
                     join h in _dbContext.DiscountProducts on a.ProductDetailId equals h.ProductId
                     join j in _dbContext.Discounts on h.DiscountId equals j.DiscountId
+                    join k in _dbContext.Images on a.ProductDetailId equals k.ProductId
                     select new ViewSanPham
                     {
                         ProductDetailId = a.ProductDetailId,
@@ -80,6 +81,7 @@ namespace Assignment.Controllers
                         Style = e.StyleName,
                         National = f.NatinalName,
                         Status = a.Status,
+                        ImageLink = k.Link
                     }).ToList();
 
         }
