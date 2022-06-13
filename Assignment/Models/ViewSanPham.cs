@@ -7,7 +7,7 @@
 
         }
 
-        public ViewSanPham(int productDetailId, string productCode, string name, int quantity, int price, string? description, DateTime importDate, int manufactureYear, string category, string brand, string style, string national, bool status)
+        public ViewSanPham(int productDetailId, string productCode, string name, int quantity, int price, string? description, DateTime importDate, int manufactureYear, string category, string brand, string style, string national, bool status, string imageLink)
         {
             ProductDetailId = productDetailId;
             ProductCode = productCode;
@@ -22,6 +22,7 @@
             Style = style;
             National = national;
             Status = status;
+            ImageLink = imageLink;
         }
 
         public int ProductDetailId { get; set; }
@@ -37,5 +38,6 @@
         public string Style { get; set; }
         public string National { get; set; }
         public bool Status { get; set; }
+        public string ImageLink { get; set; }
     }
 }
