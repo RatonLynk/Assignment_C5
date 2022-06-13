@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Assignment.Models.ProductDetail>
+﻿@model IEnumerable<Assignment.Models.ViewSanPham>
 
 @*@{
     ViewData["Title"] = "Index";
@@ -241,30 +241,23 @@
             <div class="row">
                 <div class="col-lg-8">
                     @{
-                        foreach (var item in Model)
+                        foreach (var item in Model.Where(x=>x.ProductDetailId==1))
                         {
                             <div class="product-detail-top">
                         <div class="row align-items-center">
                             <div class="col-md-5">
+                            
                                 <div class="product-slider-single normal-slider">
-                                    <img src="img/product-1.jpg" alt="Product Image">
-                                    <img src="img/product-3.jpg" alt="Product Image">
-                                    <img src="img/product-5.jpg" alt="Product Image">
-                                    <img src="img/product-7.jpg" alt="Product Image">
-                                    <img src="img/product-9.jpg" alt="Product Image">
-                                    <img src="img/product-10.jpg" alt="Product Image">
+                                            @foreach(var c in @item.ImageLink)
+                                            {
+                                                <img src="~/lib/img/@c" />
+                                            }
+
                                 </div>
-                                <div class="product-slider-single-nav normal-slider">
-                                    <div class="slider-nav-img"><img src="img/product-1.jpg" alt="Product Image"></div>
-                                    <div class="slider-nav-img"><img src="img/product-3.jpg" alt="Product Image"></div>
-                                    <div class="slider-nav-img"><img src="img/product-5.jpg" alt="Product Image"></div>
-                                    <div class="slider-nav-img"><img src="img/product-7.jpg" alt="Product Image"></div>
-                                    <div class="slider-nav-img"><img src="img/product-9.jpg" alt="Product Image"></div>
-                                    <div class="slider-nav-img"><img src="img/product-10.jpg" alt="Product Image"></div>
-                                </div>
+                                
                             </div>
                             <div class="col-md-7">
-                                <form asp-action="AddToCart" asp-route="@item.ProductDetailId">
+                                
                                     <div class="product-content">
                                         <div class="title">
                                             <h2>@item.Name</h2>
@@ -293,11 +286,12 @@
                                             <a class="btn" href="#"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
                                         </div>
                                     </div>
-                                </form>
                             </div>
                         </div>
-                    </div>
-                        }
+                    </div>                   
+                break;
+            }
+                    
                     }
 
                     @{
@@ -327,11 +321,11 @@
                                 <div id="specification" class="container tab-pane fade">
                                     <h4>Thông số kỹ thuật</h4>
                                     <ul>
-                                        <li>Màu sắc: @item.ColorProducts</li>
-                                        <li>Màu sắc: @item.ColorProducts</li>
-                                        <li>Màu sắc: @item.ColorProducts</li>
-                                        <li>Màu sắc: @item.ColorProducts</li>
-                                        <li>Màu sắc: @item.ColorProducts</li>
+                                        <li>Màu sắc: @item.Brand</li>
+                                        <li>Màu sắc: @item.Brand</li>
+                                        <li>Màu sắc: @item.Brand</li>
+                                        <li>Màu sắc: @item.Brand</li>
+                                        <li>Màu sắc: @item.Brand</li>
                                         
                                     </ul>
                                 </div>
