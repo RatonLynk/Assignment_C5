@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Assignment.Model
+namespace Assignment.Models
 {
     public partial class User
     {
+        public User()
+        {
+            Carts = new HashSet<Cart>();
+        }
+
         public int Id { get; set; }
         public string Username { get; set; } = null!;
         public string Password { get; set; } = null!;
@@ -15,6 +20,6 @@ namespace Assignment.Model
         public bool Status { get; set; }
 
         public virtual Role Role { get; set; } = null!;
-        public virtual Cart Cart { get; set; } = null!;
+        public virtual ICollection<Cart> Carts { get; set; }
     }
 }

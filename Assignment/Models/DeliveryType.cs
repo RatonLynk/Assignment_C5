@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Assignment.Model
+namespace Assignment.Models
 {
     public partial class DeliveryType
     {

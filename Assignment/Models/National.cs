@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Assignment.Model
+namespace Assignment.Models
 {
-    public partial class Style
+    public partial class National
     {
-        public Style()
+        public National()
         {
             ProductDetails = new HashSet<ProductDetail>();
         }
 
-        public int StyleId { get; set; }
-        public string StyleName { get; set; } = null!;
+        public int NationalId { get; set; }
+        public string NatinalName { get; set; } = null!;
         public bool Status { get; set; }
 
         public virtual ICollection<ProductDetail> ProductDetails { get; set; }

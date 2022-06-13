@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Assignment.Model
+namespace Assignment.Models
 {
     public partial class Cart
     {
@@ -11,17 +11,17 @@ namespace Assignment.Model
         }
 
         public int CartId { get; set; }
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public int? Total { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime? DateConfirmed { get; set; }
         public bool Status { get; set; }
         public int? DeliveryTypeId { get; set; }
-        public string Phone { get; set; } = null!;
-        public string Address { get; set; } = null!;
+        public string? Phone { get; set; }
+        public string? Address { get; set; }
 
-        public virtual User CartNavigation { get; set; } = null!;
         public virtual DeliveryType? DeliveryType { get; set; }
+        public virtual User? User { get; set; }
         public virtual ICollection<CartDetail> CartDetails { get; set; }
     }
 }
