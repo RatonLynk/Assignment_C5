@@ -25,7 +25,7 @@ namespace Assignment.Models
         public int BrandId { get; set; }
         public int StyleId { get; set; }
         public int NationalId { get; set; }
-        public string? ImageId { get; set; }
+    
         public bool Status { get; set; }
 
         public virtual Brand Brand { get; set; } = null!;
