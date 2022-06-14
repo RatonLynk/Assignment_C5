@@ -166,7 +166,6 @@
         </div>
     </div>
     <!-- Bottom Bar End -->
-
     <!-- Breadcrumb Start -->
     <div class="breadcrumb-wrap">
         <div class="container-fluid">
@@ -189,16 +188,20 @@
                         {
                             <div class="product-detail-top">
                         <div class="row align-items-center">
-                            <div class="col-md-5">
-                            
-                                <div class="product-slider-single normal-slider">
+                            <div class="col-md-5">                          
+                                <div class="product-slider-single normal-slider">                                
                                             @foreach(var c in @item.ImageLink)
                                             {
-                                                <img src="~/lib/img/@c" />
+                                                 <img src="~/lib/img/@c" alt="Product Image">                                       
                                             }
-
                                 </div>
-                                
+                                <div class="product-slider-single-nav normal-slider">
+                                     @foreach(var c in @item.ImageLink)
+                                            {
+                                                <div class="slider-nav-img"><img src="~/lib/img/@c" alt="Product Image"></div>
+                                                                          
+                                            }                                   
+                                </div>
                             </div>
                             <div class="col-md-7">
                                 
