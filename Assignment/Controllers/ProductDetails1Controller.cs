@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Assignment.Models;
 using Newtonsoft.Json;
+using System.Net;
+using Newtonsoft.Json.Linq;
 
 namespace Assignment.Controllers
 {
@@ -56,13 +58,25 @@ namespace Assignment.Controllers
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri("https://localhost:7110/api/ModelsAPI/");
             var JsonConnect = client.GetAsync("ok").Result;
+            string path = "https://localhost:7110/api/ModelsAPI/ok";
+            object productDetail=getProductDetail(path);
             string JsonData = JsonConnect.Content.ReadAsStringAsync().Result;
+
+            //JObject jObject=JObject.Parse(productDetail.ToString());
             ViewData["data"] = JsonData;
 
             var model = JsonConvert.DeserializeObject<List<ViewSanPham>>(JsonData);
+            //ViewBag.data = jObject["results"];
             return View(model);
         }
-
+        public object getProductDetail(string path)
+        {
+            using(WebClient webClient=new WebClient())
+            {
+                return JsonConvert.DeserializeObject<object>(
+                    webClient.DownloadString(path));
+            }
+        }
         // GET: ProductDetails1/Details/5
         public async Task<IActionResult> Details(int? id)
         {
