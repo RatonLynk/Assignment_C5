@@ -258,9 +258,6 @@ namespace Assignment.Models
 
                 entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
 
-                entity.Property(e => e.ImageId)
-                    .IsUnicode(false)
-                    .HasColumnName("ImageID");
 
                 entity.Property(e => e.ImportDate).HasColumnType("date");
 

@@ -246,10 +246,6 @@ namespace Assignment.Migrations
                         .HasColumnType("int")
                         .HasColumnName("ImageID");
 
-                    b.Property<string>("ImageName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Link")
                         .IsRequired()
                         .IsUnicode(false)
@@ -322,11 +318,6 @@ namespace Assignment.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageId")
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(max)")
-                        .HasColumnName("ImageID");
 
                     b.Property<DateTime>("ImportDate")
                         .HasColumnType("date");

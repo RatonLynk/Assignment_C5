@@ -7,7 +7,6 @@ namespace Assignment.Models
     {
         public int ImageId { get; set; }
         public int ProductId { get; set; }
-        public string ImageName { get; set; } = null!;
         public string Link { get; set; } = null!;
         public bool Status { get; set; }
 
