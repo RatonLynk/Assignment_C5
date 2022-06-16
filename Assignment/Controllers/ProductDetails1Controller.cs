@@ -23,36 +23,55 @@ namespace Assignment.Controllers
 
         // GET: ProductDetails1
 
-        //[HttpPost,ActionName("AddToCart")]
-        //public async Task<IActionResult> AddToCart(int buyAmount, int prodID, int colorID)
-        //{
+        [HttpPost, ActionName("AddToCart")]
+        public async Task<IActionResult> AddToCart(int buyAmount, int prodID, int colorID)
+        {
+            HttpClient httpClient = new HttpClient();
+            httpClient.BaseAddress = new System.Uri("https://localhost:7110/api/");
+            CartDetail Item = new CartDetail();
 
-        //    CartDetail Item = new CartDetail();
-            
-        //    User? user = _context.Users.FirstOrDefault(u => u.Username == HttpContext.Session.GetString("username"));
-        //    if (user == null)
-        //    {
-        //        string? jsonCart = HttpContext.Session.GetString("Cart");
-        //        List<CartDetail>? cart = new List<CartDetail>();
-        //        if (jsonCart == null || jsonCart.Length == 0)
-        //        {
-        //            cart = new List<CartDetail>();
-        //        }
-        //        else
-        //        {
-        //            cart = JsonConvert.DeserializeObject<List<CartDetail>>(jsonCart);
-        //        }
-               
-        //        Item.CartId = 0;
-        //        Item.Status = true;
-        //        Item.Quantity = buyAmount;
-        //        Item.ProductId = prodID;
-        //        Item.ColorID = colorID;
-        //        cart.Add(Item);
+            User? user = _context.Users.FirstOrDefault(u => u.Username == HttpContext.Session.GetString("username"));
+            if (user == null)
+            {
+                string? jsonCart = HttpContext.Session.GetString("Cart");
+                List<CartDetail>? cartItems = new List<CartDetail>();
+                if (jsonCart == null || jsonCart.Length == 0)
+                {
+                    cartItems = new List<CartDetail>();
+                }
+                else
+                {
+                    cartItems = JsonConvert.DeserializeObject<List<CartDetail>>(jsonCart);
+                }
 
-        //    }
-        //    return RedirectToAction("Index");
-        //}
+                Item.CartId = 0;
+                Item.Status = true;
+                Item.Quantity = buyAmount;
+                Item.ProductId = prodID;
+                Item.ColorID = colorID;
+                cartItems.Add(Item);
+                HttpContext.Session.SetString("Cart", cartItems.ToString());
+
+            } else
+            {
+                Cart cart = _context.Carts.FirstOrDefault(c => c.UserId == user.Id && c.Status == true);
+                if (cart == null)
+                {
+                    cart = new Cart();
+                    cart.CartId = _context.Carts.ToList().Count();
+                    cart.DateCreated = DateTime.Now;
+                    cart.UserId = user.Id;
+                    cart.Status = true;
+                    var jsonConnect = httpClient.PostAsJsonAsync("Carts/Add-Cart", cart);
+                }
+                else
+                {
+
+                }
+
+            }
+            return RedirectToAction("Index");
+        }
         public async Task<IActionResult> Index()
         {
             HttpClient client = new HttpClient();
