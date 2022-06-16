@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Assignment.Models.National>
+﻿@model IEnumerable<Assignment.Models.Image>
 
 @{
     Layout = null;
@@ -19,10 +19,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.NatinalName)
+                @Html.DisplayNameFor(model => model.Link)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product)
             </th>
             <th></th>
         </tr>
@@ -31,15 +34,18 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.NatinalName)
+                @Html.DisplayFor(modelItem => item.Link)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.NationalId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.NationalId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.NationalId">Delete</a>
+                @Html.DisplayFor(modelItem => item.Product.ProductDetailId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ImageId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ImageId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ImageId">Delete</a>
             </td>
         </tr>
 }

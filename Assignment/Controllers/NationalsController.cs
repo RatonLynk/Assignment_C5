@@ -9,141 +9,139 @@ using Assignment.Models;
 
 namespace Assignment.Controllers
 {
-    public class CategoriesController : Controller
+    public class NationalsController : Controller
     {
         private readonly C5_AssignmentContext _context;
 
-        public CategoriesController(C5_AssignmentContext context)
+        public NationalsController(C5_AssignmentContext context)
         {
             _context = context;
         }
 
-        // GET: Categories
+        // GET: Nationals
         public async Task<IActionResult> Index()
         {
-              return _context.Categories != null ? 
-                          View(await _context.Categories.ToListAsync()) :
-                          Problem("Entity set 'C5_AssignmentContext.Categories'  is null.");
+              return _context.Nationals != null ? 
+                          View(await _context.Nationals.ToListAsync()) :
+                          Problem("Entity set 'C5_AssignmentContext.Nationals'  is null.");
         }
 
-        // GET: Categories/Details/5
+        // GET: Nationals/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Categories == null)
+            if (id == null || _context.Nationals == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.CategoryId == id);
-            if (category == null)
+            var national = await _context.Nationals
+                .FirstOrDefaultAsync(m => m.NationalId == id);
+            if (national == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(national);
         }
 
-        // GET: Categories/Create
+        // GET: Nationals/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Categories/Create
+        // POST: Nationals/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CategoryId,CategoryName,Status")] Category category)
+        public async Task<IActionResult> Create([Bind("NationalId,NatinalName,Status")] National national)
         {
             if (ModelState.IsValid)
             {
                 HttpClient client = new HttpClient();
                 client.BaseAddress = new System.Uri("https://localhost:7110/");
-                var jsondata = client.PostAsJsonAsync("api/CategoiesAPI/post-categories", category).Result;
+                var jsondata = client.PostAsJsonAsync("api/NationalsAPI/post-nationals", national).Result;
                 var check = jsondata.IsSuccessStatusCode;
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            return View(national);
         }
 
-        // GET: Categories/Edit/5
+        // GET: Nationals/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Categories == null)
+            if (id == null || _context.Nationals == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null)
+            var national = await _context.Nationals.FindAsync(id);
+            if (national == null)
             {
                 return NotFound();
             }
-            return View(category);
+            return View(national);
         }
 
-        // POST: Categories/Edit/5
+        // POST: Nationals/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CategoryId,CategoryName,Status")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("NationalId,NatinalName,Status")] National national)
         {
-            if (id != category.CategoryId)
+            if (ModelState.IsValid)
             {
                 HttpClient client = new HttpClient();
                 client.BaseAddress = new System.Uri("https://localhost:7110/");
-                var jsondata = client.PutAsJsonAsync("api/CategoriesAPI/put/" + id, category).Result;
+                var jsondata = client.PutAsJsonAsync("api/NationalsAPI/put/" + id, national).Result;
                 var check = jsondata.IsSuccessStatusCode;
                 return RedirectToAction(nameof(Index));
-            }
-
-           
-            return View(category);
+            }        
+            return View(national);
         }
 
-        // GET: Categories/Delete/5
+        // GET: Nationals/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Categories == null)
+            if (id == null || _context.Nationals == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.CategoryId == id);
-            if (category == null)
+            var national = await _context.Nationals
+                .FirstOrDefaultAsync(m => m.NationalId == id);
+            if (national == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(national);
         }
 
-        // POST: Categories/Delete/5
+        // POST: Nationals/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            Color color = new Color();
-            color = _context.Colors.FirstOrDefault(c => c.ColorId == id);
-            if (color != null)
+            National national = new National();
+            national = _context.Nationals.FirstOrDefault(c => c.NationalId == id);
+            if (national != null)
             {
-                color.Status = false;
+                national.Status = false;
                 HttpClient client = new HttpClient();
                 client.BaseAddress = new System.Uri("https://localhost:7110/");
-                var jsondata = client.PutAsJsonAsync("api/CategoriesAPI/Categories-delete/" + id, color).Result;
+                var jsondata = client.PutAsJsonAsync("api/NationalsAPI/national-delete/" + id, national).Result;
                 var check = jsondata.IsSuccessStatusCode;
                 return RedirectToAction(nameof(Index));
             }
             return View();
         }
 
-        private bool CategoryExists(int id)
+        private bool NationalExists(int id)
         {
-          return (_context.Categories?.Any(e => e.CategoryId == id)).GetValueOrDefault();
+          return (_context.Nationals?.Any(e => e.NationalId == id)).GetValueOrDefault();
         }
     }
 }

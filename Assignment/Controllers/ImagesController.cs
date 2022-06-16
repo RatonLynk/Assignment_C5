@@ -9,141 +9,142 @@ using Assignment.Models;
 
 namespace Assignment.Controllers
 {
-    public class CategoriesController : Controller
+    public class ImagesController : Controller
     {
         private readonly C5_AssignmentContext _context;
 
-        public CategoriesController(C5_AssignmentContext context)
+        public ImagesController(C5_AssignmentContext context)
         {
             _context = context;
         }
 
-        // GET: Categories
+        // GET: Images
         public async Task<IActionResult> Index()
         {
-              return _context.Categories != null ? 
-                          View(await _context.Categories.ToListAsync()) :
-                          Problem("Entity set 'C5_AssignmentContext.Categories'  is null.");
+            var c5_AssignmentContext = _context.Images.Include(i => i.Product);
+            return View(await c5_AssignmentContext.ToListAsync());
         }
 
-        // GET: Categories/Details/5
+        // GET: Images/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Categories == null)
+            if (id == null || _context.Images == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.CategoryId == id);
-            if (category == null)
+            var image = await _context.Images
+                .Include(i => i.Product)
+                .FirstOrDefaultAsync(m => m.ImageId == id);
+            if (image == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(image);
         }
 
-        // GET: Categories/Create
+        // GET: Images/Create
         public IActionResult Create()
         {
+            ViewData["ProductId"] = new SelectList(_context.ProductDetails, "ProductDetailId", "ProductDetailId");
             return View();
         }
 
-        // POST: Categories/Create
+        // POST: Images/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CategoryId,CategoryName,Status")] Category category)
+        public async Task<IActionResult> Create([Bind("ImageId,ProductId,Link,Status")] Image image)
         {
             if (ModelState.IsValid)
             {
                 HttpClient client = new HttpClient();
                 client.BaseAddress = new System.Uri("https://localhost:7110/");
-                var jsondata = client.PostAsJsonAsync("api/CategoiesAPI/post-categories", category).Result;
+                var jsondata = client.PostAsJsonAsync("api/ImagesAPI/post-images", image).Result;
                 var check = jsondata.IsSuccessStatusCode;
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            return View(image);
         }
 
-        // GET: Categories/Edit/5
+        // GET: Images/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Categories == null)
+            if (id == null || _context.Images == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null)
+            var image = await _context.Images.FindAsync(id);
+            if (image == null)
             {
                 return NotFound();
             }
-            return View(category);
+            ViewData["ProductId"] = new SelectList(_context.ProductDetails, "ProductDetailId", "ProductDetailId", image.ProductId);
+            return View(image);
         }
 
-        // POST: Categories/Edit/5
+        // POST: Images/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CategoryId,CategoryName,Status")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("ImageId,ProductId,Link,Status")] Image image)
         {
-            if (id != category.CategoryId)
+            if (ModelState.IsValid)
             {
                 HttpClient client = new HttpClient();
                 client.BaseAddress = new System.Uri("https://localhost:7110/");
-                var jsondata = client.PutAsJsonAsync("api/CategoriesAPI/put/" + id, category).Result;
+                var jsondata = client.PutAsJsonAsync("api/ColorsAPI/put/" + id, image).Result;
                 var check = jsondata.IsSuccessStatusCode;
                 return RedirectToAction(nameof(Index));
             }
-
-           
-            return View(category);
+            return View(image);
         }
 
-        // GET: Categories/Delete/5
+        // GET: Images/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Categories == null)
+            if (id == null || _context.Images == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.CategoryId == id);
-            if (category == null)
+            var image = await _context.Images
+                .Include(i => i.Product)
+                .FirstOrDefaultAsync(m => m.ImageId == id);
+            if (image == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(image);
         }
 
-        // POST: Categories/Delete/5
+        // POST: Images/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            Color color = new Color();
-            color = _context.Colors.FirstOrDefault(c => c.ColorId == id);
-            if (color != null)
+            Image image = new Image();
+            image = _context.Images.FirstOrDefault(c => c.ImageId == id);
+            if (image != null)
             {
-                color.Status = false;
+                image.Status = false;
                 HttpClient client = new HttpClient();
                 client.BaseAddress = new System.Uri("https://localhost:7110/");
-                var jsondata = client.PutAsJsonAsync("api/CategoriesAPI/Categories-delete/" + id, color).Result;
+                var jsondata = client.PutAsJsonAsync("api/ImagesAPI/image-delete/" + id, image).Result;
                 var check = jsondata.IsSuccessStatusCode;
                 return RedirectToAction(nameof(Index));
             }
             return View();
         }
 
-        private bool CategoryExists(int id)
+        private bool ImageExists(int id)
         {
-          return (_context.Categories?.Any(e => e.CategoryId == id)).GetValueOrDefault();
+          return (_context.Images?.Any(e => e.ImageId == id)).GetValueOrDefault();
         }
     }
 }
