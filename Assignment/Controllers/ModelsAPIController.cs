@@ -124,5 +124,51 @@ namespace Assignment.Controllers
         //                discount = j.DiscountName
         //            }).ToList();
         //}
+        [HttpPost("add-roles")]
+        public async Task<string> AddRoles(Role rl)
+        {
+            if (rl==null)
+            {
+                return "List Null BullShit!";
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    rl = new Role
+                    {
+                        RoleId = _dbContext.Roles.Count() + 1,
+                        RoleName = rl.RoleName,
+                    };
+                    await _dbContext.Roles.AddAsync(rl);
+                    await _dbContext.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                    return "BullShit!";
+                }
+            }
+            return "Success";
+        }
+
+        [HttpPut("{id}/update-roles")]
+        public async Task<string> UpdateRole(int id, Role rl)
+        {
+            if (id != rl.RoleId)
+            {
+                return "Ngu";
+            };
+            _dbContext.Entry(rl).State = EntityState.Modified;
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+                return "Pass";
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return "BullShit";
+            }
+        }
     }
 }
