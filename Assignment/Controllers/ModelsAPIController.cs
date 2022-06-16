@@ -67,34 +67,6 @@ namespace Assignment.Controllers
             return lstViewSP;
 
         }
-        //public async Task<ActionResult<IEnumerable<Object>>> ok()
-        //{
-        //    return (from a in _dbContext.ProductDetails
-        //            join b in _dbContext.ColorProducts on a.ProductDetailId equals b.ProductId
-        //            join c in _dbContext.Colors on b.ColorId equals c.ColorId
-        //            join d in _dbContext.Brands on a.BrandId equals d.BrandId
-        //            join e in _dbContext.Styles on a.StyleId equals e.StyleId
-        //            join f in _dbContext.Nationals on a.NationalId equals f.NationalId
-        //            join g in _dbContext.Categories on a.CategoryId equals g.CategoryId
-        //            join h in _dbContext.DiscountProducts on a.ProductDetailId equals h.ProductId
-        //            join j in _dbContext.Discounts on h.DiscountId equals j.DiscountId
-        //            where a.Status == true
-        //            select new
-        //            {
-        //                id = a.ProductDetailId,
-        //                code = a.ProductCode,
-        //                name = a.Name,
-        //                quantity = a.Quantity,
-        //                price = a.Price,
-        //                brand = d.BrandName,
-        //                manufactureYear = a.ManufactureYear,
-        //                category = g.CategoryName,
-        //                national = f.NatinalName,
-        //                style = e.StyleName,
-        //                color = c.ColorName,
-        //                discount = j.DiscountName
-        //            }).ToList();
-        //}
         [HttpPost("add-roles")]
         public async Task<string> AddRoles(Role rl)
         {
