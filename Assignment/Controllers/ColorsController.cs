@@ -59,8 +59,10 @@ namespace Assignment.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(color);
-                await _context.SaveChangesAsync();
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new System.Uri("https://localhost:7110/");
+                var jsondata = client.PostAsJsonAsync("api/ColorsAPI/post-colors", color).Result;
+                var check = jsondata.IsSuccessStatusCode;
                 return RedirectToAction(nameof(Index));
             }
             return View(color);
@@ -89,29 +91,12 @@ namespace Assignment.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ColorId,ColorName,Status")] Color color)
         {
-            if (id != color.ColorId)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(color);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ColorExists(color.ColorId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new System.Uri("https://localhost:7110/");
+                var jsondata = client.PutAsJsonAsync("api/ColorsAPI/put/" + id, color).Result;
+                var check = jsondata.IsSuccessStatusCode;
                 return RedirectToAction(nameof(Index));
             }
             return View(color);
@@ -140,18 +125,20 @@ namespace Assignment.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Colors == null)
-            {
-                return Problem("Entity set 'C5_AssignmentContext.Colors'  is null.");
-            }
-            var color = await _context.Colors.FindAsync(id);
+            Color color = new Color();
+            color = _context.Colors.FirstOrDefault(c => c.ColorId == id);
             if (color != null)
             {
-                _context.Colors.Remove(color);
+                color.Status = false;
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new System.Uri("https://localhost:7110/");
+                var jsondata = client.PutAsJsonAsync("api/ColorsAPI/color-delete/" + id, color).Result;
+                var check = jsondata.IsSuccessStatusCode;
+                return RedirectToAction(nameof(Index));
             }
+            return View();
+
             
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
 
         private bool ColorExists(int id)

@@ -92,7 +92,7 @@ namespace Assignment.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("StyleId,StyleName,Status")] Style style)
         {
-            
+                
 
             if (ModelState.IsValid)
             {
