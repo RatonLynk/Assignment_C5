@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Assignment.Model;
+using Newtonsoft.Json;
 
 namespace Assignment.Controllers
 {
@@ -55,17 +56,19 @@ namespace Assignment.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StyleId,StyleName,Status")] Style style)
+        public async Task<IActionResult> Create( Style style)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(style);
-                await _context.SaveChangesAsync();
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new System.Uri("https://localhost:7110/");
+                var jsondata =  client.PostAsJsonAsync("api/StylesAPI/post-styles", style).Result;
+                var check = jsondata.IsSuccessStatusCode;
                 return RedirectToAction(nameof(Index));
             }
             return View(style);
         }
-
+        
         // GET: Styles/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -89,29 +92,14 @@ namespace Assignment.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("StyleId,StyleName,Status")] Style style)
         {
-            if (id != style.StyleId)
-            {
-                return NotFound();
-            }
+            
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(style);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!StyleExists(style.StyleId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new System.Uri("https://localhost:7110/");
+                var jsondata = client.PutAsJsonAsync("api/StylesAPI/put/"+id, style).Result;
+                var check = jsondata.IsSuccessStatusCode;
                 return RedirectToAction(nameof(Index));
             }
             return View(style);
@@ -140,18 +128,18 @@ namespace Assignment.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Styles == null)
-            {
-                return Problem("Entity set 'C5_AssignmentContext.Styles'  is null.");
-            }
-            var style = await _context.Styles.FindAsync(id);
+            Style style = new Style();
+            style = _context.Styles.FirstOrDefault(c=>c.StyleId == id);
             if (style != null)
             {
-                _context.Styles.Remove(style);
+                style.Status = false;
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new System.Uri("https://localhost:7110/");
+                var jsondata = client.PutAsJsonAsync("api/StylesAPI/delete/" + id,style).Result;
+                var check = jsondata.IsSuccessStatusCode;
+                return RedirectToAction(nameof(Index));
             }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return View();
         }
 
         private bool StyleExists(int id)
