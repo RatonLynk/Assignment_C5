@@ -1,1 +1,95 @@
 ﻿
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+
+<body>
+
+     <div class="container">
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <h1>Add new Product</h1>
+                <form action="" class="add-product-post">
+                    <div class="form-group">
+                        <label for="name">Tên sản phẩm</label>
+                        <input type="text" class="form-control" name="name-value" id="">
+                    </div>
+                    <div class="form-group">
+                        <label for="productCode">Mã Sản phẩm</label>
+                        <input type="text" class="form-control" name="productCode" id="">
+                    </div>
+                    <div class="form-group">
+                        <label for="desc">Mô tả</label>
+                        <textarea type="text" class="form-control" name="desc" id=""></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="quantity">Quantity</label>
+                        <input type="number" class="form-control" name="quantity" id="">
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Price</label>
+                        <input type="text" class="form-control" name="price" id="">
+                    </div>
+                    <div class="form-group">
+                        <label for="manufactureYear">ManufactureYear</label>
+                        <input type="number" class="form-control" name="manufactureYear" id="">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Thêm mới</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>
+
+
+
+
+
+        <script>
+           const postlist = document.querySelector('.post-list')
+const url = "https://localhost:7110/api/ProductDetails";
+const name = document.getElementById(name - value);
+const productCode = document.getElementById(productCode);
+const desc = document.getElementById(desc);
+const quantity = document.getElementById(quantity);
+const price = document.getElementById(price);
+const manufactureYear = document.getElementById(manufactureYear);
+let output = "";
+
+addProduct.addEventListener('submit', (e) => {
+    e.preventDefault();
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            name: name.value,
+            productCode: productCode.value,
+            desc: desc.value,
+            quantity: quantity.value,
+            price: price.value,
+            manufactureYear: manufactureYear.value
+
+        })
+    }).then(res => res.json())
+})
+
+fetch(url).then(res => res.json()).then(data => console.log(data))
+        </script>
