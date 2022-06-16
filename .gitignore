@@ -361,3 +361,10 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Assignment/Migrations/C5_AssignmentContextModelSnapshot.cs
+/Assignment/Migrations/20220611024657_v2.Designer.cs
+/Assignment/Migrations
+/Assignment/Migrations/C5_AssignmentContextModelSnapshot.cs
+/Assignment/appsetting.json
+/Assignment/appsettings.json
+/.gitignore
