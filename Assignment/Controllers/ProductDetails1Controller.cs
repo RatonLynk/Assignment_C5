@@ -63,8 +63,8 @@ namespace Assignment.Controllers
             }
             else
             {
-                user = _context.Users.FirstOrDefault(u => u.Username == HttpContext.Session.GetString("username"));
-                Cart? cart = _context.Carts.FirstOrDefault(c => c.UserId == user.Id && c.Status == true);
+                 user = _context.Users.FirstOrDefault(u => u.Username == HttpContext.Session.GetString("username"));
+                 Cart? cart = _context.Carts.FirstOrDefault(c => c.UserId == user.Id && c.Status);
                 if (cart == null)
                 {
                     cart = new Cart();
@@ -80,9 +80,16 @@ namespace Assignment.Controllers
                     CartDetail detail = JsonConvert.DeserializeObject<CartDetail>(httpClient.GetAsync("api/CartDetails/" + Item.CartDetailId).Result.Content.ReadAsStringAsync().Result);
                     detail.Quantity += Item.Quantity;
                     httpClient.PutAsJsonAsync("CartDetails", detail);
+                    CartDetailsController control = new CartDetailsController(_context);
+                    control.PutCartDetail(detail.CartDetailId,detail);
                 }
                 else
                 {
+                    Item = new CartDetail();
+                    Item.CartId = cart.CartId;
+                    Item.Status = true;
+                    Item.Quantity = buyAmount;
+                    Item.ProductId = prodID;
                     Item.CartDetailId = _context.CartDetails.ToList().Count();
                     await httpClient.PostAsJsonAsync("CartDetails", Item);
                     CartDetailsController control = new CartDetailsController(_context);
@@ -127,7 +134,6 @@ namespace Assignment.Controllers
             if (HttpContext.Session.GetString("username") == null || HttpContext.Session.GetString("username") == "")
             {
                 
-
                  string? jsonCart = HttpContext.Session.GetString("Cart");
                 List<CartDetail>? cartItems = new List<CartDetail>();
                 if (jsonCart != null && jsonCart.Length != 0)
@@ -154,7 +160,7 @@ namespace Assignment.Controllers
                     return View(new List<CartDetail>());
                 } else
                 {
-                    List<CartDetail> LoadCartItems = _context.CartDetails.Where(i => i.CartId == CartForLoading.CartId && i.Quantity > 0).ToList();
+                    List<CartDetail> LoadCartItems = JsonConvert.DeserializeObject<List<CartDetail>>(client.GetAsync("CartDetails").Result.Content.ReadAsStringAsync().Result).Where(c=>c.CartId == CartForLoading.CartId && c.Quantity > 0).ToList();
                     List<ViewSanPham> products = new List<ViewSanPham>();
                     if (LoadCartItems.Count > 0 && LoadCartItems != null)
                     {
@@ -172,70 +178,64 @@ namespace Assignment.Controllers
             return NoContent();
         }
 
-        //public async Task<IActionResult> Checkout(List<int> ids, List<int> quantities)
-        //{
-        //    items = new List<CartItem>();
-        //    CartItem item = new CartItem();
-        //    List<Product> products = new List<Product>();
-        //    for (int i = 0; i < ids.Count(); i++)
-        //    {
-        //        item = _context.CartItems.FirstOrDefault(a => a.ItemId == ids[i]);
-        //        item.Amount = quantities[i];
-        //        items.Add(item);
-        //        await _context.SaveChangesAsync();
+        public async Task<IActionResult> Checkout(List<int> ids, List<int> quantities)
+        {
+            List<CartDetail> items = new List<CartDetail>();
+            CartDetail item = new CartDetail();
+            List<ViewSanPham> products = new List<ViewSanPham>();
+            for (int i = 0; i < ids.Count(); i++)
+            {
+                item = _context.CartDetails.FirstOrDefault(a => a.CartDetailId == ids[i]);
+                item.Quantity = quantities[i];
+                items.Add(item);
 
-        //    }
-        //    foreach (var it in items)
-        //    {
-        //        products.Add(_context.Products.FirstOrDefault(p => p.ProductId == it.ProductId));
-        //    }
-        //    ViewData["CartProducts"] = products;
-        //    return View(items);
-        //}
+            }
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri("https://localhost:7110/api/ModelsAPI/");
+            var JsonConnect = client.GetAsync("ok").Result;
+            string JsonData = JsonConnect.Content.ReadAsStringAsync().Result;
+            List<ViewSanPham> model = JsonConvert.DeserializeObject<List<ViewSanPham>>(JsonData);
+            foreach (var it in items)
+            {
+                products.Add(model.FirstOrDefault(p => p.ProductDetailId == it.ProductId));
+            }
+            ViewData["CartProducts"] = products;
+            return View(items);
+        }
 
-        //public async Task<IActionResult> Purchase(string address, string phone, int CartID)
-        //{
-        //    if (HttpContext.Session.GetString("username") != null && HttpContext.Session.GetString("username") != "")
-        //    {
-        //        ViewData["username"] = HttpContext.Session.GetString("username");
-        //        ViewData["name"] = _context.Users.FirstOrDefault(c => c.Username == HttpContext.Session.GetString("username")).Name;
-        //        ViewData["Role"] = _context.Users.FirstOrDefault(c => c.Username == HttpContext.Session.GetString("username")).Role;
-        //    }
-        //    else
-        //    {
-        //        ViewData["username"] = "";
-        //    }
-        //    Cart MarkedCart = _context.Carts.FirstOrDefault(c => c.CartId == CartID);
-        //    items = _context.CartItems.Where(c => c.CartId == CartID).ToList();
-        //    Product prod = new Product();
-        //    if (MarkedCart != null)
-        //    {
-        //        if (address != null && address != "")
-        //        {
-        //            if (phone != null && phone.Length <= 15 && phone.Length >= 10)
-        //            {
-        //                foreach (var item in items)
-        //                {
+        public async Task<IActionResult> Purchase(string address, string phone, int CartID)
+        {
+            Cart MarkedCart = _context.Carts.FirstOrDefault(c => c.CartId == CartID);
+            List<CartDetail> items = _context.CartDetails.Where(c => c.CartId == CartID).ToList();
+            ProductDetail prod = new ProductDetail();
+            if (MarkedCart != null)
+            {
+                if (address != null && address != "")
+                {
+                    if (phone != null)
+                    {
+                        foreach (var item in items)
+                        {
 
-        //                    prod = _context.Products.FirstOrDefault(c => c.ProductId == item.ProductId);
-        //                    prod.Quantity -= item.Amount;
-        //                    if (prod.Quantity == 0)
-        //                    {
-        //                        prod.Status = false;
-        //                    }
-        //                    _context.Products.Update(prod);
-        //                }
-        //                MarkedCart.Status = false;
-        //                _context.Carts.Update(MarkedCart);
-        //                await _context.SaveChangesAsync();
-        //                ViewData["Result"] = "succ";
-        //                return View();
-        //            }
-        //        }
-        //    }
-        //    ViewData["Result"] = "fail";
-        //    return View();
-        //}
+                            prod = _context.ProductDetails.FirstOrDefault(c => c.ProductDetailId == item.ProductId);
+                            prod.Quantity -= item.Quantity;
+                            if (prod.Quantity == 0)
+                            {
+                                prod.Status = false;
+                            }
+                            _context.ProductDetails.Update(prod);
+                        }
+                        MarkedCart.Status = false;
+                        _context.Carts.Update(MarkedCart);
+                        await _context.SaveChangesAsync();
+                        ViewData["Result"] = "succ";
+                        return RedirectToAction("Cart");
+                    }
+                }
+            }
+            ViewData["Result"] = "fail";
+            return RedirectToAction("Cart");
+        }
 
 
         public async Task<IActionResult> Index(int? id)

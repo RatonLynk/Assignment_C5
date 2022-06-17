@@ -1,9 +1,9 @@
-﻿@*@model IEnumerable<Assignment.Models.CartDetail>
+﻿@model IEnumerable<Assignment.Models.CartDetail>
 
 @{
     ViewData["Title"] = " Checkin";
     var x = ViewData["username"] as string;
-    List<Product> products = ViewData["CartProducts"] as List<Product>;
+    List<ViewSanPham> products = ViewData["CartProducts"] as List<ViewSanPham>;
     int amount;
     decimal total = 0;
 }
@@ -18,7 +18,7 @@
                     </div>
                     @foreach (var item in products)
                     {
-                        amount = @Model.FirstOrDefault(i => i.ProductId == item.ProductId).Amount;
+                        amount = @Model.FirstOrDefault(i => i.ProductId == item.ProductDetailId).Quantity;
                         decimal sum = (decimal)amount * item.Price;
                         total += sum;
                         <div class="card rounded-3 mb-4">
@@ -31,7 +31,7 @@
                                         <p class="lead fw-normal mb-2">Quantity: @amount</p>
                                     </div>
                                     <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                        <h5 class="mb-0" id="sumfor_@item.ProductId" onchange="">Item Total: @Convert.ToInt32(sum) VNĐ</h5>
+                                        <h5 class="mb-0" id="sumfor_@item.ProductDetailId" onchange="">Item Total: @Convert.ToInt32(sum) VNĐ</h5>
                                     </div>
                                 </div>
                             </div>
@@ -50,7 +50,7 @@
                                 <label class="form-label" for="form1Example23">Phone No.</label>
                             </div>
                         </div>
-                        <input type="hidden" name="CartID" value="@Model.ToList()[0].CartId" />
+                        <input type="hidden" name="CartID" value="@Model.FirstOrDefault().CartId" />
                         <h5 class="d-flex float-right mb-1">Total: <span id="total">@Decimal.Truncate(total)</span> VNĐ</h5>
                         <button type="submit" class="btn btn-warning btn-block btn-lg">Confirm Order</button>
                     </div>
@@ -59,4 +59,4 @@
             </div>
         </div>
     </section>
-</form>*@
+</form>
