@@ -47,6 +47,8 @@ namespace Assignment.Controllers
         // GET: Brands/Create
         public IActionResult Create()
         {
+            //int id = _context.Brands.ToList().Count();
+            //ViewData["id"] = id;
             return View();
         }
 
@@ -59,8 +61,10 @@ namespace Assignment.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(brand);
-                await _context.SaveChangesAsync();
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new System.Uri("https://localhost:7110/");
+                var jsondata = client.PostAsJsonAsync("api/BrandsAPI/post-brands", brand).Result;
+                var check = jsondata.IsSuccessStatusCode;
                 return RedirectToAction(nameof(Index));
             }
             return View(brand);
@@ -89,32 +93,16 @@ namespace Assignment.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("BrandId,BrandName,Status")] Brand brand)
         {
-            if (id != brand.BrandId)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(brand);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BrandExists(brand.BrandId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new System.Uri("https://localhost:7110/");
+                var jsondata = client.PutAsJsonAsync("api/BrandsAPI/put/"+id, brand).Result;
+                var check = jsondata.IsSuccessStatusCode;
                 return RedirectToAction(nameof(Index));
             }
             return View(brand);
+            
         }
 
         // GET: Brands/Delete/5
@@ -140,18 +128,18 @@ namespace Assignment.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Brands == null)
-            {
-                return Problem("Entity set 'C5_AssignmentContext.Brands'  is null.");
-            }
-            var brand = await _context.Brands.FindAsync(id);
+            Brand brand = new Brand();
+            brand = _context.Brands.FirstOrDefault(c => c.BrandId == id);
             if (brand != null)
             {
-                _context.Brands.Remove(brand);
+                brand.Status = false;
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new System.Uri("https://localhost:7110/");
+                var jsondata = client.PutAsJsonAsync("api/BrandsAPI/delete/" + id,brand).Result;
+                var check = jsondata.IsSuccessStatusCode;
+                return RedirectToAction(nameof(Index));
             }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return View();
         }
 
         private bool BrandExists(int id)

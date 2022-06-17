@@ -89,6 +89,14 @@ namespace Assignment.APIController
           {
               return "Entity set 'C5_AssignmentContext.Styles'  is null.";
           }
+            if(_context.Styles.Count() == 0)
+            {
+                style.StyleId = 1;
+            }
+            else
+            {
+                style.StyleId = _context.Styles.Count() + 1;
+            }
             _context.Styles.Add(style);
             try
             {

@@ -110,37 +110,38 @@ namespace Assignment.Controllers
                 return NotFound();
             }
 
-            var deliveryType = await _context.DeliveryTypes
+            var discount = await _context.DeliveryTypes
                 .FirstOrDefaultAsync(m => m.DeliveryTypeId == id);
-            if (deliveryType == null)
+            if (discount == null)
             {
                 return NotFound();
             }
 
-            return View(deliveryType);
+            return View(discount);
         }
 
-        // POST: DeliveryTypes/Delete/5
+        // POST: Discountsmvc/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             DeliveryType delivery = new DeliveryType();
             delivery = _context.DeliveryTypes.FirstOrDefault(c => c.DeliveryTypeId == id);
-            if (delivery != null)
+            if (ModelState.IsValid)
             {
+
                 HttpClient client = new HttpClient();
                 client.BaseAddress = new System.Uri("https://localhost:7110/");
-                var jsondata = client.DeleteAsync("api/DeliveryTypes1/delete/" + id).Result;
+                var jsondata = client.PutAsJsonAsync("api/DeliveryTypes1/delete/" + id, delivery).Result;
                 var check = jsondata.IsSuccessStatusCode;
                 return RedirectToAction(nameof(Index));
             }
-            return View();
+            return View(delivery);
         }
 
-        private bool DeliveryTypeExists(int id)
+        private bool DiscountExists(int id)
         {
-          return (_context.DeliveryTypes?.Any(e => e.DeliveryTypeId == id)).GetValueOrDefault();
+            return (_context.DeliveryTypes?.Any(e => e.DeliveryTypeId == id)).GetValueOrDefault();
         }
     }
 }

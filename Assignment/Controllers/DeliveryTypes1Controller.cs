@@ -138,10 +138,39 @@ namespace Assignment.Controllers
             return NoContent();
         }
 
+       
+        [HttpPut("delete/{id}")]
+        public async Task<IActionResult> FakeDelete(int id, DeliveryType deliveryType)
+        {
+            if (id != deliveryType.DeliveryTypeId)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(deliveryType).State = EntityState.Modified;
+
+            try
+            {
+                deliveryType.Status = false;
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!DeliveryTypeExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
         private bool DeliveryTypeExists(int id)
         {
             return (_context.DeliveryTypes?.Any(e => e.DeliveryTypeId == id)).GetValueOrDefault();
         }
-
     } 
 }

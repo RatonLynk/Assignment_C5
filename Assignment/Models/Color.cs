@@ -9,7 +9,7 @@ namespace Assignment.Models
         {
             ColorProducts = new HashSet<ColorProduct>();
         }
-
+        
         public int ColorId { get; set; }
         public string ColorName { get; set; } = null!;
         public bool Status { get; set; }
