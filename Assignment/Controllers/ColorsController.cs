@@ -47,6 +47,8 @@ namespace Assignment.Controllers
         // GET: Colors/Create
         public IActionResult Create()
         {
+            //int id = _context.Colors.ToList().Count();
+            //ViewData["id"] = id;
             return View();
         }
 
@@ -61,6 +63,7 @@ namespace Assignment.Controllers
             {
                 HttpClient client = new HttpClient();
                 client.BaseAddress = new System.Uri("https://localhost:7110/");
+                //color.ColorId = _context.Colors.Count() + 1;
                 var jsondata = client.PostAsJsonAsync("api/ColorsAPI/post-colors", color).Result;
                 var check = jsondata.IsSuccessStatusCode;
                 return RedirectToAction(nameof(Index));

@@ -10,7 +10,7 @@ namespace Assignment.Models
         {
             ProductDetails = new HashSet<ProductDetail>();
         }
-        [Range(0, 4)]
+        
         public int StyleId { get; set; }
         [Required]
         public string StyleName { get; set; } = null!;

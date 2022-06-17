@@ -6,61 +6,60 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Assignment.Models;
-using Newtonsoft.Json;
 
 namespace Assignment.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ColorsAPIController : ControllerBase
+    public class BrandsAPIController : ControllerBase
     {
         private readonly C5_AssignmentContext _context;
 
-        public ColorsAPIController(C5_AssignmentContext context)
+        public BrandsAPIController(C5_AssignmentContext context)
         {
             _context = context;
         }
 
-        // GET: api/ColorsAPI
+        // GET: api/BrandsAPI
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Color>>> GetColors()
+        public async Task<ActionResult<IEnumerable<Brand>>> GetBrands()
         {
-          if (_context.Colors == null)
+          if (_context.Brands == null)
           {
               return NotFound();
           }
-            return await _context.Colors.ToListAsync();
+            return await _context.Brands.ToListAsync();
         }
 
-        // GET: api/ColorsAPI/5
+        // GET: api/BrandsAPI/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Color>> GetColor(int id)
+        public async Task<ActionResult<Brand>> GetBrand(int id)
         {
-          if (_context.Colors == null)
+          if (_context.Brands == null)
           {
               return NotFound();
           }
-            var color = await _context.Colors.FindAsync(id);
+            var brand = await _context.Brands.FindAsync(id);
 
-            if (color == null)
+            if (brand == null)
             {
                 return NotFound();
             }
 
-            return color;
+            return brand;
         }
 
-        // PUT: api/ColorsAPI/5
+        // PUT: api/BrandsAPI/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("put/{id}")]
-        public async Task<IActionResult> PutColor(int id, Color color)
+        public async Task<IActionResult> PutBrand(int id, Brand brand)
         {
-            if (id != color.ColorId)
+            if (id != brand.BrandId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(color).State = EntityState.Modified;
+            _context.Entry(brand).State = EntityState.Modified;
 
             try
             {
@@ -68,7 +67,7 @@ namespace Assignment.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ColorExists(id))
+                if (!BrandExists(id))
                 {
                     return NotFound();
                 }
@@ -81,39 +80,33 @@ namespace Assignment.Controllers
             return NoContent();
         }
 
-        // POST: api/ColorsAPI
+        // POST: api/BrandsAPI
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        [Route("post-colors")]
-        public async Task<ActionResult<Color>> PostColor(Color color)
+        [HttpPost("post-brands")]
+        public async Task<string> PostBrand(Brand brand)
         {
-            //if (_context.Colors.Count(c => c.ColorName == color.ColorName) != 0)
-            //{
-            //    return Problem("These names is already exit");
-            //}
-
-            if (_context.Colors == null)
+          if (_context.Brands == null)
           {
-              return Problem("Entity set 'C5_AssignmentContext.Colors'  is null.");
+              return "Entity set 'C5_AssignmentContext.Brands'  is null.";
           }
-            if(_context.Colors.Count() == 0)
+            if(_context.Brands.Count() == 0)
             {
-                color.ColorId = 1;
+                brand.BrandId = 1;
             }
             else
             {
-                color.ColorId = _context.Colors.Count() + 1;
+                brand.BrandId = _context.Brands.Count() + 1;
             }
-            _context.Colors.Add(color);
+            _context.Brands.Add(brand);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (ColorExists(color.ColorId))
+                if (BrandExists(brand.BrandId))
                 {
-                    return Conflict();
+                    return "Conflict";
                 }
                 else
                 {
@@ -121,42 +114,42 @@ namespace Assignment.Controllers
                 }
             }
 
-            return CreatedAtAction("GetColor", new { id = color.ColorId }, color);
+            return "Success";
         }
 
-        // DELETE: api/ColorsAPI/5
+        // DELETE: api/BrandsAPI/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteColor(int id)
+        public async Task<IActionResult> DeleteBrand(int id)
         {
-            if (_context.Colors == null)
+            if (_context.Brands == null)
             {
                 return NotFound();
             }
-            var color = await _context.Colors.FindAsync(id);
-            if (color == null)
+            var brand = await _context.Brands.FindAsync(id);
+            if (brand == null)
             {
                 return NotFound();
             }
 
-            _context.Colors.Remove(color);
+            _context.Brands.Remove(brand);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool ColorExists(int id)
+        private bool BrandExists(int id)
         {
-            return (_context.Colors?.Any(e => e.ColorId == id)).GetValueOrDefault();
+            return (_context.Brands?.Any(e => e.BrandId == id)).GetValueOrDefault();
         }
-        [HttpPut("color-delete/{id}")]
-        public async Task<IActionResult> FakeDelete(int id, Color color)
+        [HttpPut("delete/{id}")]
+        public async Task<IActionResult> FakeDelete(int id, Brand brand)
         {
-            if (id != color.ColorId)
+            if (id != brand.BrandId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(color).State = EntityState.Modified;
+            _context.Entry(brand).State = EntityState.Modified;
 
             try
             {
@@ -164,7 +157,7 @@ namespace Assignment.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ColorExists(id))
+                if (!BrandExists(id))
                 {
                     return NotFound();
                 }
