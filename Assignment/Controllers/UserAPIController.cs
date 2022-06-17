@@ -71,6 +71,25 @@ namespace Assignment.Controllers
                 return "BullShit";
             }
         }
+        // DELETE: api/Styles/5
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            if (_dbContext.Users == null)
+            {
+                return NotFound();
+            }
+            var user = await _dbContext.Users.FindAsync(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+            _dbContext.Users.Remove(user);
+            await _dbContext.SaveChangesAsync();
+
+            return NoContent();
+        }
         private bool UserIDExist(int id)
         {
             return (_dbContext.Users?.Any(e => e.Id == id)).GetValueOrDefault();
