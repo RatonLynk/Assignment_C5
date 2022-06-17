@@ -49,6 +49,17 @@ namespace Assignment.Controllers
             return cartDetail;
         }
 
+        [HttpGet]
+        [Route("ShowCart/{UID}")]
+        public async Task<ActionResult<IEnumerable<CartDetail>>> ShowCart(int UID)
+        {
+            if (_context.CartDetails == null)
+            {
+                return NotFound();
+            }
+            return await _context.CartDetails.Where(c=>c.CartId == _context.Carts.FirstOrDefault(x=>x.UserId == UID).CartId).ToListAsync();
+        }
+
         // PUT: api/CartDetails/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -82,7 +93,6 @@ namespace Assignment.Controllers
 
         // POST: api/CartDetails
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [Route("Add-Item")]
         [HttpPost]
         public async Task<ActionResult<CartDetail>> PostCartDetail(CartDetail cartDetail)
         {

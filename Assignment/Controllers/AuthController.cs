@@ -55,6 +55,41 @@ namespace Assignment.Controllers
                 {
                     HttpContext.Session.SetString("username", user.Username);
                     HttpContext.Session.SetString("roleId", user.RoleId.ToString());
+                    //if (HttpContext.Session.GetString("Cart") != null && HttpContext.Session.GetString("Cart").Length != 0)
+                    //{
+                    //    HttpClient httpClient = new HttpClient();
+                    //    httpClient.BaseAddress = new Uri("https://localhost:7110");
+                    //    string jsonCart = HttpContext.Session.GetString("Cart");
+                    //    List<CartDetail> cartItems = JsonConvert.DeserializeObject<List<CartDetail>>(jsonCart);
+                    //    if (cartItems.Count > 0)
+                    //    {
+
+                    //        Cart? cart = _assignmentContext.Carts.FirstOrDefault(c => c.UserId == user.Id && c.Status == true);
+                    //        if (cart == null)
+                    //        {
+                    //            cart = new Cart();
+                    //            cart.CartId = _assignmentContext.Carts.ToList().Count();
+                    //            cart.DateCreated = DateTime.Now;
+                    //            cart.UserId = user.Id;
+                    //            cart.Status = true;
+                    //            await httpClient.PostAsJsonAsync("api/Carts/Add-Cart", cart);
+
+                    //        }
+                    //        foreach (var Item in cartItems)
+                    //        {
+                                
+                    //            Item.Status = true;
+                    //            Item.CartId = cart.CartId;
+                    //            Item.ProductId = prodID;
+                    //            Item.Quantity = buyAmount;
+                    //            Item.ColorID = colorID;
+                    //            Item.CartDetailId = _context.CartDetails.ToList().Count();
+                    //            await httpClient.PostAsJsonAsync("CartDetails", Item);
+                    //            CartDetailsController control = new CartDetailsController(_assignmentContext);
+                    //            control.PostCartDetail(Item);
+                    //        }
+                    //    }
+                    //}
                     return RedirectToAction("Index", "Home");
                 }
             }
