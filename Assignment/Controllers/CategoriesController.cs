@@ -59,8 +59,10 @@ namespace Assignment.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(category);
-                await _context.SaveChangesAsync();
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new System.Uri("https://localhost:7110/");
+                var jsondata = client.PostAsJsonAsync("api/CategoiesAPI/post-categories", category).Result;
+                var check = jsondata.IsSuccessStatusCode;
                 return RedirectToAction(nameof(Index));
             }
             return View(category);
@@ -91,29 +93,14 @@ namespace Assignment.Controllers
         {
             if (id != category.CategoryId)
             {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(category);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CategoryExists(category.CategoryId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new System.Uri("https://localhost:7110/");
+                var jsondata = client.PutAsJsonAsync("api/CategoriesAPI/put/" + id, category).Result;
+                var check = jsondata.IsSuccessStatusCode;
                 return RedirectToAction(nameof(Index));
             }
+
+           
             return View(category);
         }
 
@@ -140,18 +127,18 @@ namespace Assignment.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Categories == null)
+            Color color = new Color();
+            color = _context.Colors.FirstOrDefault(c => c.ColorId == id);
+            if (color != null)
             {
-                return Problem("Entity set 'C5_AssignmentContext.Categories'  is null.");
+                color.Status = false;
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new System.Uri("https://localhost:7110/");
+                var jsondata = client.PutAsJsonAsync("api/CategoriesAPI/Categories-delete/" + id, color).Result;
+                var check = jsondata.IsSuccessStatusCode;
+                return RedirectToAction(nameof(Index));
             }
-            var category = await _context.Categories.FindAsync(id);
-            if (category != null)
-            {
-                _context.Categories.Remove(category);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return View();
         }
 
         private bool CategoryExists(int id)

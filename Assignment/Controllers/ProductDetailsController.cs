@@ -22,8 +22,6 @@ namespace Assignment.Controllers
 
         // GET: api/ProductDetails
         [HttpGet]
-        [Route("api-get-list-product-details")]
-
         public async Task<ActionResult<IEnumerable<ProductDetail>>> GetProductDetails()
         {
           if (_context.ProductDetails == null)
@@ -85,6 +83,7 @@ namespace Assignment.Controllers
         // POST: api/ProductDetails
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Route("post")]
         public async Task<ActionResult<ProductDetail>> PostProductDetail(ProductDetail productDetail)
         {
           if (_context.ProductDetails == null)
