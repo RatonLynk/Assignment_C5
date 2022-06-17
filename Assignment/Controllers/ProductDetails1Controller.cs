@@ -77,7 +77,9 @@ namespace Assignment.Controllers
                 }
                 if (_context.CartDetails.FirstOrDefault(c => c.ProductId == Item.ProductId) != null)
                 {
-                    httpClient.PutAsJsonAsync("CartDetails", JsonConvert.DeserializeObject<CartDetail>(httpClient.GetAsync("api/CartDetails/" + Item.CartDetailId).Result.ToString()).Quantity += Item.Quantity);
+                    CartDetail detail = JsonConvert.DeserializeObject<CartDetail>(httpClient.GetAsync("api/CartDetails/" + Item.CartDetailId).Result.Content.ReadAsStringAsync().Result);
+                    detail.Quantity += Item.Quantity;
+                    httpClient.PutAsJsonAsync("CartDetails", detail);
                 }
                 else
                 {
@@ -120,8 +122,8 @@ namespace Assignment.Controllers
         {
             User? user = new User();
             HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("https://localhost:7110/api/ModelsAPI/");
-            var JsonConnect = client.GetAsync("ok").Result;
+            client.BaseAddress = new Uri("https://localhost:7110/api/");
+            var JsonConnect = client.GetAsync("ModelsAPI/ok").Result;
             if (HttpContext.Session.GetString("username") == null || HttpContext.Session.GetString("username") == "")
             {
                 
@@ -235,7 +237,8 @@ namespace Assignment.Controllers
         //    return View();
         //}
 
-        public async Task<IActionResult> Index()
+
+        public async Task<IActionResult> Index(int? id)
         {
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri("https://localhost:7110/api/ModelsAPI/");
@@ -249,8 +252,8 @@ namespace Assignment.Controllers
 
             var model = JsonConvert.DeserializeObject<List<ViewSanPham>>(JsonData);
             //ViewBag.data = jObject["results"];
-            return View(model);
-        }
+            return View(model.Where(c=>c.ProductDetailId == id));
+        } 
         public object getProductDetail(string path)
         {
             using(WebClient webClient=new WebClient())
