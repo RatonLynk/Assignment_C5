@@ -75,17 +75,23 @@ namespace Assignment.Controllers
                     await httpClient.PostAsJsonAsync("api/Carts/Add-Cart", cart);
                     
                 }
-                if (cart.)
+                if (_context.CartDetails.FirstOrDefault(c => c.ProductId == Item.ProductId) != null)
                 {
-
+                    httpClient.PutAsJsonAsync("CartDetails", JsonConvert.DeserializeObject<CartDetail>(httpClient.GetAsync("api/CartDetails/" + Item.CartDetailId).Result.ToString()).Quantity += Item.Quantity);
                 }
+                else
+                {
+                    Item.CartDetailId = _context.CartDetails.ToList().Count();
                     await httpClient.PostAsJsonAsync("CartDetails", Item);
-                CartDetailsController control = new CartDetailsController(_context);
-                control.PostCartDetail(Item);
+                    CartDetailsController control = new CartDetailsController(_context);
+                    control.PostCartDetail(Item);
+                }
+
             }
             
             return RedirectToAction("Cart");
         }
+
 
         [HttpPost, ActionName("Remove")]
         [Route("Products/Remove/{id:int}")]
@@ -163,6 +169,71 @@ namespace Assignment.Controllers
             }
             return NoContent();
         }
+
+        //public async Task<IActionResult> Checkout(List<int> ids, List<int> quantities)
+        //{
+        //    items = new List<CartItem>();
+        //    CartItem item = new CartItem();
+        //    List<Product> products = new List<Product>();
+        //    for (int i = 0; i < ids.Count(); i++)
+        //    {
+        //        item = _context.CartItems.FirstOrDefault(a => a.ItemId == ids[i]);
+        //        item.Amount = quantities[i];
+        //        items.Add(item);
+        //        await _context.SaveChangesAsync();
+
+        //    }
+        //    foreach (var it in items)
+        //    {
+        //        products.Add(_context.Products.FirstOrDefault(p => p.ProductId == it.ProductId));
+        //    }
+        //    ViewData["CartProducts"] = products;
+        //    return View(items);
+        //}
+
+        //public async Task<IActionResult> Purchase(string address, string phone, int CartID)
+        //{
+        //    if (HttpContext.Session.GetString("username") != null && HttpContext.Session.GetString("username") != "")
+        //    {
+        //        ViewData["username"] = HttpContext.Session.GetString("username");
+        //        ViewData["name"] = _context.Users.FirstOrDefault(c => c.Username == HttpContext.Session.GetString("username")).Name;
+        //        ViewData["Role"] = _context.Users.FirstOrDefault(c => c.Username == HttpContext.Session.GetString("username")).Role;
+        //    }
+        //    else
+        //    {
+        //        ViewData["username"] = "";
+        //    }
+        //    Cart MarkedCart = _context.Carts.FirstOrDefault(c => c.CartId == CartID);
+        //    items = _context.CartItems.Where(c => c.CartId == CartID).ToList();
+        //    Product prod = new Product();
+        //    if (MarkedCart != null)
+        //    {
+        //        if (address != null && address != "")
+        //        {
+        //            if (phone != null && phone.Length <= 15 && phone.Length >= 10)
+        //            {
+        //                foreach (var item in items)
+        //                {
+
+        //                    prod = _context.Products.FirstOrDefault(c => c.ProductId == item.ProductId);
+        //                    prod.Quantity -= item.Amount;
+        //                    if (prod.Quantity == 0)
+        //                    {
+        //                        prod.Status = false;
+        //                    }
+        //                    _context.Products.Update(prod);
+        //                }
+        //                MarkedCart.Status = false;
+        //                _context.Carts.Update(MarkedCart);
+        //                await _context.SaveChangesAsync();
+        //                ViewData["Result"] = "succ";
+        //                return View();
+        //            }
+        //        }
+        //    }
+        //    ViewData["Result"] = "fail";
+        //    return View();
+        //}
 
         public async Task<IActionResult> Index()
         {
