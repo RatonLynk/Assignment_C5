@@ -48,6 +48,8 @@ namespace Assignment.Controllers
         // GET: Styles/Create
         public IActionResult Create()
         {
+            //int id = _context.Styles.ToList().Count();
+            //ViewData["id"] = id;
             return View();
         }
 
@@ -56,7 +58,7 @@ namespace Assignment.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create( Style style)
+        public async Task<IActionResult> Create(int id, [Bind("StyleId,StyleName,Status")] Style style)
         {
             if (ModelState.IsValid)
             {

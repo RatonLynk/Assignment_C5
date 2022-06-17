@@ -9,7 +9,7 @@ namespace Assignment.Models
         {
             ProductDetails = new HashSet<ProductDetail>();
         }
-
+        
         public int StyleId { get; set; }
         public string StyleName { get; set; } = null!;
         public bool Status { get; set; }
