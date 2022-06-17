@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Assignment.Models;
 
-namespace Assignment.Models
+namespace Assignment.Controllers
 {
     public class RolesController : Controller
     {
@@ -54,17 +55,21 @@ namespace Assignment.Models
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RoleName,Status")] Role role)
+        public async Task<IActionResult> Create([Bind("RoleId,RoleName,Status")] Role role)
         {
             if (ModelState.IsValid)
             {
                 HttpClient client = new HttpClient();
-                client.BaseAddress = new System.Uri("https://localhost:7110");
-                var jsonReport = client.PostAsJsonAsync("api/ModelsAPI/add-roles", role).Result;
-                string check= await jsonReport.Content.ReadAsStringAsync();
-                if (check=="Success")
+                client.BaseAddress = new System.Uri("https://localhost:7110/");
+                var jsondata = client.PostAsJsonAsync("api/ModelsAPI/add-roles", role).Result;
+                string rt = await jsondata.Content.ReadAsStringAsync();
+                if (rt == "Success")
                 {
                     return RedirectToAction("Index");
+                }
+                if (rt == "BullShit!")
+                {
+                    return RedirectToAction("Create");
                 }
             }
             return View(role);
@@ -91,19 +96,15 @@ namespace Assignment.Models
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("RoleName,Status")] Role role)
+        public async Task<IActionResult> Edit(int id, [Bind("RoleId,RoleName,Status")] Role role)
         {
-            if (id != role.RoleId)
-            {
-                return NotFound();
-            }
             if (ModelState.IsValid)
             {
                 try
                 {
                     HttpClient client = new HttpClient();
-                    client.BaseAddress = new System.Uri("https://localhost:7156/");
-                    var jsondata = client.PutAsJsonAsync("api/ModelsAPI/" + id + "/update-roles", role).Result;
+                    client.BaseAddress = new System.Uri("https://localhost:7110/");
+                    var jsondata = client.PutAsJsonAsync("api/ModelsAPI/put/" + id, role).Result;
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -151,19 +152,16 @@ namespace Assignment.Models
             var role = await _context.Roles.FindAsync(id);
             if (role != null)
             {
-                if (role.Status == true)
+                if (role.Status==true)
                 {
                     role.Status = false;
                 }
-                HttpClient client =new HttpClient();
-                client.BaseAddress = new System.Uri("https://localhost:7156/");
-                var jsonRp = client.PutAsJsonAsync("api/ModelsAPI/" + id + "/update-role",role).Result;
-                string rt = await jsonRp.Content.ReadAsStringAsync();
-                if (rt=="Pass")
-                {
-                    return RedirectToAction("Index");
-                }
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new System.Uri("https://localhost:7110/");
+                var jsondata = client.PutAsJsonAsync("api/ModelsAPI/put/" + id, role).Result;
             }
+            
+            //await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

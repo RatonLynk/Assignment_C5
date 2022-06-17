@@ -138,8 +138,9 @@ namespace Assignment.Controllers
                 {
                     rl = new Role
                     {
-                        RoleId = _dbContext.Roles.Count() + 1,
+                        RoleId = _dbContext.Roles.Count(),
                         RoleName = rl.RoleName,
+                        Status=rl.Status,
                     };
                     await _dbContext.Roles.AddAsync(rl);
                     await _dbContext.SaveChangesAsync();
@@ -152,7 +153,7 @@ namespace Assignment.Controllers
             return "Success";
         }
 
-        [HttpPut("{id}/update-roles")]
+        [HttpPut("put/{id}")]
         public async Task<string> UpdateRole(int id, Role rl)
         {
             if (id != rl.RoleId)
