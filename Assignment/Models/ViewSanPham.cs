@@ -39,5 +39,6 @@
         public string National { get; set; }
         public bool Status { get; set; }
         public List<string> ImageLink { get; set; }
+        public List<string> Color { get; set; }
     }
 }

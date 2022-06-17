@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Assignment.Models
 {
@@ -11,6 +12,7 @@ namespace Assignment.Models
         }
 
         public int Id { get; set; }
+        [Required(ErrorMessage = "Vui lòng không bỏ trống")]
         public string Username { get; set; } = null!;
         public string Password { get; set; } = null!;
         public string FullName { get; set; } = null!;
@@ -19,7 +21,7 @@ namespace Assignment.Models
         public int RoleId { get; set; }
         public bool Status { get; set; }
 
-        public virtual Role Role { get; set; } = null!;
-        public virtual ICollection<Cart> Carts { get; set; }
+        public virtual Role? Role { get; set; } = null!;
+        public virtual ICollection<Cart>? Carts { get; set; }
     }
 }

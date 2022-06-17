@@ -139,9 +139,7 @@ namespace Assignment.Controllers
                 var check = jsondata.IsSuccessStatusCode;
                 return RedirectToAction(nameof(Index));
             }
-            return View();
-
-            
+            return View(); 
         }
 
         private bool ColorExists(int id)
