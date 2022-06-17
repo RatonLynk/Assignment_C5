@@ -59,12 +59,12 @@ namespace Assignment.Controllers
                     x.ImageLink = _lst;
                 }
 
-                foreach (var x in lstViewSP)
-                {
-                    var lst = _dbContext.ColorProducts.Where(c => c.ProductId == x.ProductDetailId).ToList();
-                    List<string> couloire = _dbContext.Colors.Where(c => lst.Select(c => c.ColorId).Contains(c.ColorId)).Select(c => c.ColorName).ToList();
-                    x.Color = couloire;
-                }
+                //foreach (var x in lstViewSP)
+                //{
+                //    var lst = _dbContext.ColorProducts.Where(c => c.ProductId == x.ProductDetailId).ToList();
+                //    List<string> couloire = _dbContext.Colors.Where(c => lst.Select(c => c.ColorId).Contains(c.ColorId)).Select(c => c.ColorName).ToList();
+                //    x.Color = couloire;
+                //}
 
                 return lstViewSP;
 
