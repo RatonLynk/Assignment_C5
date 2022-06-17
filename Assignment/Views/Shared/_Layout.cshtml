@@ -43,42 +43,110 @@
                  <a href="#" class="navbar-brand">MENU</a>
                 <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                         <span class="navbar-toggler-icon"></span>
-                    </button>
+                </button>
+                    @{
+                         string? username = Context.Session.GetString("username");
+                         string? roleId = Context.Session.GetString("roleId");
+                        if(roleId=="0")
+                        {
+                                 <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                                <div class="navbar-nav mr-auto">
+                             
+                                <a class="nav-link text-dark"  class="nav-item nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
 
-                <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-                    <div class="navbar-nav mr-auto">
-                         
-                            <a class="nav-link text-dark"  class="nav-item nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Product</a>
+                          
+                            
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Productdetails1" asp-action="Index">Product Detail</a>
+                          
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">QLNV</a>
+                          
+                            
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Productdetails1" asp-action="Index">QLSP</a>
+                          
+                                    <a href="cart.html" class="nav-item nav-link">Cart</a>
+                                    <a href="checkout.html" class="nav-item nav-link">Checkout</a>
+                                    <a asp-area="" asp-controller="Products" asp-action="Index" class="nav-item nav-link">My Account</a>
+                                    <div class="nav-item dropdown">
+                                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">More Pages</a>
+                                    </div>
+                                </div>
+                                @if(!string.IsNullOrEmpty(username)){
+                                    <div class="navbar-nav ml-auto">
+                                    <div class="nav-item dropdown">
+                                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">  @Context.Session.GetString("username")</a>
+                                        <div class="dropdown-menu">
+                                             <a class="dropdown-item" asp-area="" asp-controller="Auth" asp-action="Login">Logout</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                }
+                                else
+                                {
+                                      <div class="navbar-nav ml-auto">
+                                    <div class="nav-item dropdown">
+                                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"> User Account</a>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" asp-area="" asp-controller="Auth" asp-action="Login">Login</a>
+                                             <a class="dropdown-item" asp-area="" asp-controller="Anth" asp-action="Register">Register</a>
+                                             <a class="dropdown-item" asp-area="" asp-controller="Anth" asp-action="ForgotPassword">ForgotPassword</a>
 
-                        
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Product</a>
-                      
-                        
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Productdetails1" asp-action="Index">Product Detail</a>
-                      
-                        
-                        <a href="cart.html" class="nav-item nav-link">Cart</a>
-                        <a href="checkout.html" class="nav-item nav-link">Checkout</a>
-                        <a asp-area="" asp-controller="Products" asp-action="Index" class="nav-item nav-link">My Account</a>
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">More Pages</a>
-                            <div class="dropdown-menu">
-                                <a href="wishlist.html" class="dropdown-item">Wishlist</a>
-                                <a href="login.html" class="dropdown-item">Login & Register</a>
-                                <a href="contact.html" class="dropdown-item">Contact Us</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="navbar-nav ml-auto">
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Account</a>
-                            <div class="dropdown-menu">
-                                <a href="#" class="dropdown-item">Login</a>
-                                <a href="#" class="dropdown-item">Register</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                }
+                                
+                             </div>
+
+                        }
+                        else
+                        {
+                                 <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                                <div class="navbar-nav mr-auto">
+                             
+                                <a class="nav-link text-dark"  class="nav-item nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+
+                            
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Product</a>
+                          
+                            
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Productdetails1" asp-action="Index">Product Detail</a>
+                          
+                                    <a href="cart.html" class="nav-item nav-link">Cart</a>
+                                    <a href="checkout.html" class="nav-item nav-link">Checkout</a>
+                                    <a asp-area="" asp-controller="Products" asp-action="Index" class="nav-item nav-link">My Account</a>
+                                    <div class="nav-item dropdown">
+                                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">More Pages</a>
+                                    </div>
+                                </div>
+                                @if(!string.IsNullOrEmpty(username)){
+
+                                    <div class="navbar-nav ml-auto">
+                                    <div class="nav-item dropdown">
+                                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">  @Context.Session.GetString("username")</a>
+                                        <div class="dropdown-menu">
+                                             <a class="dropdown-item" asp-area="" asp-controller="Auth" asp-action="Login">Logout</a>
+                                        </div>
+                                    </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                      <div class="navbar-nav ml-auto">
+                                    <div class="nav-item dropdown">
+                                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"> User Account</a>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" asp-area="" asp-controller="Auth" asp-action="Login">Login</a>
+                                             <a class="dropdown-item" asp-area="" asp-controller="Anth" asp-action="Register">Register</a>
+                                             <a class="dropdown-item" asp-area="" asp-controller="Anth" asp-action="ForgotPassword">ForgotPassword</a>
+                                        </div>
+                                    </div>
+                                    </div>
+                                }
+                             </div>
+                        }
+                    }
             </div>
         </nav>
           </div>
@@ -103,7 +171,6 @@
     <script>
         (function ($) {
     "use strict";
-
     // Dropdown on mouse hover
     $(document).ready(function () {
         function toggleNavbarMethod() {
@@ -120,8 +187,6 @@
         toggleNavbarMethod();
         $(window).resize(toggleNavbarMethod);
     });
-
-
     // Back to top button
     $(window).scroll(function () {
         if ($(this).scrollTop() > 100) {
@@ -134,8 +199,6 @@
         $('html, body').animate({ scrollTop: 0 }, 1500, 'easeInOutExpo');
         return false;
     });
-
-
     // Header slider
     $('.header-slider').slick({
         autoplay: true,
@@ -144,8 +207,6 @@
         slidesToShow: 1,
         slidesToScroll: 1
     });
-
-
     // Product Slider 4 Column
     $('.product-slider-4').slick({
         autoplay: true,
@@ -180,8 +241,6 @@
             },
         ]
     });
-
-
     // Product Slider 3 Column
     $('.product-slider-3').slick({
         autoplay: true,
@@ -210,8 +269,6 @@
             },
         ]
     });
-
-
     // Product Detail Slider
     $('.product-slider-single').slick({
         infinite: true,
@@ -230,8 +287,6 @@
         focusOnSelect: true,
         asNavFor: '.product-slider-single'
     });
-
-
     // Brand Slider
     $('.brand-slider').slick({
         speed: 5000,
@@ -273,8 +328,6 @@
             }
         ]
     });
-
-
     // Review slider
     $('.review-slider').slick({
         autoplay: true,
@@ -291,8 +344,6 @@
             }
         ]
     });
-
-
     // Widget slider
     $('.sidebar-slider').slick({
         autoplay: true,
@@ -301,8 +352,6 @@
         slidesToShow: 1,
         slidesToScroll: 1
     });
-
-
     // Quantity
     $('.qty button').on('click', function () {
         var $button = $(this);
@@ -318,8 +367,6 @@
         }
         $button.parent().find('input').val(newVal);
     });
-
-
     // Shipping address show hide
     $('.checkout #shipto').change(function () {
         if ($(this).is(':checked')) {
@@ -328,8 +375,6 @@
             $('.checkout .shipping-address').slideUp();
         }
     });
-
-
     // Payment methods show hide
     $('.checkout .payment-method .custom-control-input').change(function () {
         if ($(this).prop('checked')) {
