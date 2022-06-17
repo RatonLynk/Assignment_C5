@@ -19,7 +19,7 @@ namespace Assignment.Models
         public int RoleId { get; set; }
         public bool Status { get; set; }
 
-        public virtual Role Role { get; set; } = null!;
+        public virtual Role? Role { get; set; } = null!;
         public virtual ICollection<Cart> Carts { get; set; }
     }
 }
