@@ -5,8 +5,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddMvc();
+builder.Services.AddMvc().AddSessionStateTempDataProvider();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddSession();
 var connectionString = builder.Configuration.GetConnectionString("conn");
 builder.Services.AddDbContext<C5_AssignmentContext>(options => options.UseSqlServer(connectionString));
 var app = builder.Build();
@@ -23,9 +24,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseSession();
 app.UseAuthorization();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
