@@ -34,11 +34,6 @@ namespace Assignment.Controllers
             _dbContext.Users.Add(user);
             try
             {
-                await _dbContext.SaveChangesAsync();
-                return Ok();
-            }
-            catch (DbUpdateException)
-            {
                 if (UserIDExist(user.Id))
                 {
                     return BadRequest("Conflict");
@@ -47,10 +42,12 @@ namespace Assignment.Controllers
                 {
                     return BadRequest("Existing username");
                 }
-                else
-                {
-                    throw;
-                }
+                await _dbContext.SaveChangesAsync();
+                return Ok();
+            }
+            catch (DbUpdateException e)
+            {
+                return BadRequest(e.Message);
             }
         }
         [HttpPut("put/{id}")]
@@ -63,6 +60,10 @@ namespace Assignment.Controllers
             _dbContext.Entry(user).State = EntityState.Modified;
             try
             {
+                if (UserNameExist(user.Username))
+                {
+                    return "Existing username";
+                }
                 await _dbContext.SaveChangesAsync();
                 return "Pass";
             }

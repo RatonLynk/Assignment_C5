@@ -110,7 +110,7 @@ namespace Assignment.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Username,Password,FullName,Phone,Address,RoleId,Status")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Username,Password,FullName,Phone,Address,RoleId,Status")] User user)
         {
             if (id != user.Id)
             {
@@ -124,6 +124,11 @@ namespace Assignment.Controllers
                     HttpClient client = new HttpClient();
                     client.BaseAddress = new System.Uri("https://localhost:7110/");
                     var jsondata = client.PutAsJsonAsync("api/UserAPI/put/" + id, user).Result;
+                    string check = jsondata.Content.ReadAsStringAsync().Result;
+                    if(check == "Existing username")
+                    {
+                        return BadRequest(check);
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
